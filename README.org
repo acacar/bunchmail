@@ -1,0 +1,49 @@
+#+TITLE: BunchMail
+#+AUTHOR: Aybar C. Acar
+
+* What is it?
+
+It is a very simple command line utility to combine several Maildir
+folders into one.
+
+* Is it any good?
+
+*NO!*. I wrote it because I needed to combine several gmail accounts and other miscellaneous mail accounts reaching back to 1999 into a single Maildir. This is essentially throwaway code. I'm only making it public in case
+
+- I need it again later and I can't find it in the mess that is my hard drive,
+- someone else may have a similar use-case and might make use of it
+
+So, it is a brittle, not very optimized (but fast enough) utility that worked for me, YMMV.
+
+* Features
+
+- Collates all mail by you into the target Sent folder.
+  - You need to give all email identities (addresses) you use, or have ever used; and it will use them to decide which messages were sent by you.
+- Ability to select which source maildirs get combined into the final inbox, and which ones are going to get sent to the final Archives maildir.
+- Can deduplicate messages across many source Maildirs (based on Message-ID).
+  - Can be turned on with the =--nodupes= flag.
+  - In case of duplicate messages destined to the target Inbox and Archive, the copy kept is placed in the Inbox.
+- Infers the date/time each message was sent by parsing =Received:= headers if they exist.
+  - Adjusts the base name and ctime/mtime of each message file according to this timestamp. 
+
+* How do I use it?
+
+#+BEGIN_EXAMPLE
+  Usage of bunchmail:
+    -archives value
+          Comma separated list of Archive maildir paths
+    -bunchpath string
+          The directory path to the bunch maildir
+    -domain string
+          the domain to use for message files (default "bunchmail.local")
+    -identities value
+          Comma separated list of all mail addresses you use(d) to send mail (for sent mail collation)
+    -inboxes value
+          Comma delimited list of Inbox paths
+    -nodupes
+          If true, duplicate messages are discarded
+    -removeflags string
+          Flags to remove from mail (e.g. "FRT")
+#+END_EXAMPLE
+
+*Note:* When using the comma separated lists of paths (e.g. for --inboxes) do not trust shell expansions ( =~/foo= etc.). Either write the full path or use variables (.e.g. =$HOME/foo=)
